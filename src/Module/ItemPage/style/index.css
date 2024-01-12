@@ -1,0 +1,129 @@
+.item-page-heading{
+    color: rgba(255, 14, 14, 1);
+    font-family: Poppins;
+    font-size: 30px;
+    font-weight: 600;
+}
+.item-page-main-area{
+  flex-direction: row;
+  gap: 20px;
+  display: flex;
+}
+.item-page-main-area-1{
+    width: 70%;
+    /* background-color: red; */
+    /* height: 10rem; */
+}
+.item-page-main-area-2{
+    width: 30%;
+    /* background-color: red;
+    height: 10rem; */
+    display: flex;
+    align-items: flex-end;
+    padding-top: 20px;
+    flex-direction: column;
+}
+.item-page-main-area-2-header-strip{
+    width: 80%;
+    height: 50px;
+    background-color: rgba(255, 14, 14, 1);
+    border-radius: 2;
+    color: white;
+    align-items: center;
+    display: flex;
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 1);
+    font-family: Poppins;
+    /* padding-left: 10px; */
+}
+.item-page-main-area-2-news-cards{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+.itempage-main-sub-news-area{
+    margin-top: 40px;
+    width: 80%;
+}
+.item-page-main-area-1-main-box{
+    width: 90%;
+}
+.item-page-main-area-1-main-box>img{
+    width: 100%;
+}
+.item-page-main-area-1-main-box>div{
+    font-size: 15px;
+    font-weight: 600;
+    font-family: Poppins;
+    color: rgba(0, 0, 0, 0.9);
+}
+
+
+
+
+/* Photo galery */
+/* PhotoGallery.css */
+
+.photo-gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0px 80px;
+  }
+
+  .details-page-main-heading{
+    margin: 20px;
+  }
+  
+  .gallery-item {
+    margin: 20px;
+    text-align: start;
+    background: #fff;
+    transition: all 0.2s ease-out;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 3px 1px 1px rgba(168,168,168,.5);
+  }
+  
+  .image-row {
+    display: flex;
+  }
+  
+  .gallery-info {
+    margin-top: 10px;
+    padding-left: 5px;
+    text-align: center;
+  }
+
+  .gallery-item-main {
+    width: 80%;
+    margin: 20px;
+    text-align: start;
+    background: #fff;
+    transition: all 0.2s ease-out;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 3px 1px 1px rgba(168, 168, 168, 0.5);
+  }
+  
+  .image-row-main {
+    width: 100%; /* Adjust this width as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Added to center images vertically */
+  }
+  
+  .gallery-image {
+    width: 100%; /* Set the width of each image to 100% of the container */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Maintain aspect ratio and cover the entire space */
+    margin: 0; /* Remove any default margin */
+    border-radius: 6px; /* Apply border-radius to images if needed */
+  }
+
+  .video-card-img-main{
+    border-radius: 25px;
+    height: 400px;
+  }
+  
