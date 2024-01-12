@@ -27,6 +27,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { API_URL } from "../API";
 import PhotoGalery from "./Module/ItemPage/PhotoGalery";
 import VideoGalery from "./Module/ItemPage/VideoGalery";
+import ReactGA from "react-ga4";
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -47,7 +48,7 @@ const App = () => {
       });
   }, [location]);
 
-  ReactGa.initialize("G-1CES7BYV2Q");
+  ReactGA.initialize("G-0Q1P3TXN8E");
 
   return (
     <Loading.Provider value={{ loading, setLoading, effect, setEffect }}>

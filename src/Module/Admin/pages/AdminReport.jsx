@@ -24,9 +24,10 @@ const AdminReport = () => {
     // Add your delete logic here
     console.log("Delete function executed");
   };
-  const handleDeleteCancel  = () => {
-    console.log("test")
-  }
+
+  const handleDeleteCancel = () => {
+    setIsModalDeleteOpen(false);
+  };
 
   useEffect(() => {
     axios.get(`${API_URL}/article`).then((article) => {
@@ -51,6 +52,11 @@ const AdminReport = () => {
     // ...
   };
 
+  const handleArticleClick = () => {
+
+  }
+
+  console.log(handleArticleClick)
   const columns = [
     {
       title: "News Id",
@@ -63,7 +69,6 @@ const AdminReport = () => {
       key: "image",
       render: (_, { type, image, _id }) => {
         const isImage = type === "img";
-  
         return (
           <>
             {isImage ? (
@@ -103,7 +108,7 @@ const AdminReport = () => {
       title: "Headline",
       dataIndex: "title",
       key: "title",
-      render: (text) => {
+      render: (text, record) => {
         let tt = "";
         if (tt.length < 15) {
           for (let icon = 0; icon < text?.length; icon++) {
@@ -111,12 +116,17 @@ const AdminReport = () => {
             tt += element;
           }
         }
-        return <a>{tt + "..."}</a>;
+        return (
+          <a
+            onClick={() => handleArticleClick(record._id)}
+            style={{ cursor: "pointer" }}
+          >
+            {tt + "..."}
+          </a>
+        );
       },
-    },  
-    
+    },
   ];
-  
 
   const dataWithSerialNumbers = sortedArticleData.map((serialNumber) => ({
     ...articleData[serialNumber - 1],
@@ -149,7 +159,7 @@ const AdminReport = () => {
       </Card>
       <Modal
         title="Delete User"
-        open={isModalDeleteOpen}
+        visible={isModalDeleteOpen}
         onOk={OnDelete}
         onCancel={handleDeleteCancel}
         okText="Yes"
