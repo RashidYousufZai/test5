@@ -27,7 +27,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { API_URL } from "../API";
 import PhotoGalery from "./Module/ItemPage/PhotoGalery";
 import VideoGalery from "./Module/ItemPage/VideoGalery";
-import ReactGA from "react-ga4";
+import ReactGA from 'react-ga';
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
