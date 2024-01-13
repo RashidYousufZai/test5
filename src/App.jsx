@@ -39,6 +39,7 @@ const App = () => {
   const location = useLocation();
 
   useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
     axios
       .get(`${API_URL}/user?id=${localStorage.getItem("id")}`)
       .then((user) => {
@@ -48,7 +49,7 @@ const App = () => {
       });
   }, [location]);
 
-  ReactGA.initialize("G-0Q1P3TXN8E");
+  ReactGA.initialize("G-0Q1P3TXN8E", { debug: true });
 
   return (
     <Loading.Provider value={{ loading, setLoading, effect, setEffect }}>
