@@ -57,7 +57,7 @@ const AdminLayout = () => {
       .get(`${API_URL}/user?id=${localStorage.getItem("id")}`)
       .then((user) => {
         if (user.data[0].role === "admin") {
-          setIsAdmin(true)
+          setIsAdmin(true);
           setAccess(user?.data[0]?.acsses);
           // setAccess([
           //   "users",
@@ -87,9 +87,7 @@ const AdminLayout = () => {
       <Sider style={siderStyle2}></Sider>
       <Content style={contentStyle}>
         <Routes>
-        {isAdmin && (
-            <Route path="admin-report" element={<AdminReport />} />
-          )}
+          {isAdmin && <Route path="admin-report" element={<AdminReport />} />}
           <Route
             path="dashboard/upload"
             element={
@@ -122,7 +120,7 @@ const AdminLayout = () => {
                 return (
                   <Route key={path} path={path} element={<PhotoGalery />} />
                 );
-                case "videogalery":
+              case "videogalery":
                 return (
                   <Route key={path} path={path} element={<VideoGalery />} />
                 );
@@ -147,9 +145,9 @@ const AdminLayout = () => {
               case "flashnews":
                 return <Route key={path} path={path} element={<FlashNews />} />;
               case "sociallink":
-                  return (
-                    <Route key={path} path={path} element={<SocialMediaLink />} />
-                  );
+                return (
+                  <Route key={path} path={path} element={<SocialMediaLink />} />
+                );
               case "creatuser":
                 return (
                   <Route key={path} path={path} element={<CreateUser />} />

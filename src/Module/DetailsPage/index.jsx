@@ -38,7 +38,6 @@ const DetailsPage = () => {
   const [isFav, setIsFav] = useState(false);
   const [data, setData] = useState(null);
   const [article, setArticle] = useState(null);
-  
 
   const [name, setName] = useState("");
   const [Email, setEmail] = useState("");
@@ -74,8 +73,6 @@ const DetailsPage = () => {
     });
   }, [axios]);
   console.log(ArticleData);
-  
-  
 
   useEffect(() => {
     console.log("heee");
@@ -96,6 +93,20 @@ const DetailsPage = () => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          `${API_URL}/impressions/${query.get("id")}/add`
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  });
   useEffect(() => {
     axios
       .get(
@@ -106,7 +117,7 @@ const DetailsPage = () => {
         console.log(data);
       })
       .catch(() => {});
-  }, [])
+  }, []);
   console.log(breakingNews);
   const [data2, setData2] = useState([]);
   useEffect(() => {
@@ -250,9 +261,17 @@ const DetailsPage = () => {
                       }}
                     >
                       {item?.platform === "Instagram" ? (
-                        <InstagramEmbed url={item?.link} width={328}  height={310}/>
+                        <InstagramEmbed
+                          url={item?.link}
+                          width={328}
+                          height={310}
+                        />
                       ) : (
-                        <TwitterEmbed url={item?.link} width={325} height={310}/>
+                        <TwitterEmbed
+                          url={item?.link}
+                          width={325}
+                          height={310}
+                        />
                       )}
                     </div>
                   ))}
@@ -345,26 +364,25 @@ const DetailsPage = () => {
             <RelatedNewsCard />
             <RelatedNewsCard /> */}
             {breakingNews?.map((data, index) => {
-                let title = data.title?.split(" ").join("-");
+              let title = data.title?.split(" ").join("-");
 
-                if (title) {
-                  return (
-                    <StoriesCard
-                      data={data}
-                      key={index}
-                      OnPress={() =>
-                        navigation(`/details/${title}?id=${data?._id}`)
-                      }
-                      image={data?.image}
-                      text={data?.title}
-                    />
-                  );
-                } else {
-                  console.error("Title is undefined or null for data:", data);
-                  return null;
-                }
-              })}
-            
+              if (title) {
+                return (
+                  <StoriesCard
+                    data={data}
+                    key={index}
+                    OnPress={() =>
+                      navigation(`/details/${title}?id=${data?._id}`)
+                    }
+                    image={data?.image}
+                    text={data?.title}
+                  />
+                );
+              } else {
+                console.error("Title is undefined or null for data:", data);
+                return null;
+              }
+            })}
           </div>
           <div className="details-page-latest-news">
             <div className="details-main-related-new-area-heading">

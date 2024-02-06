@@ -59,6 +59,7 @@ const MainPage = () => {
   const [Technology, setTechnology] = useState([]);
   const [PhotoGalery, setPhotoGalery] = useState([]);
   const [VideoGalery, setVideoGalery] = useState([]);
+  const delay = 2000;
 
   console.log(Technology);
 
@@ -255,6 +256,18 @@ const MainPage = () => {
     //     console.log(err);
     //   });
   }, []);
+
+  useEffect(() => {
+    const nextFlashNews = () => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === flashnews.length - 1 ? 0 : prevIndex + 1
+      );
+    };
+
+    const intervalId = setInterval(nextFlashNews, delay);
+
+    return () => clearInterval(intervalId); // Cleanup on component unmount
+  }, [flashnews, delay]);
 
   const handlePrevClick = () => {
     setCurrentIndex((prevIndex) =>
@@ -809,7 +822,7 @@ const MainPage = () => {
             </div>
           </div>
         </div>
-       { console.log(VideoGalery)}
+        {console.log(VideoGalery)}
         <div className="main-video-gallery-main-container container2 container3">
           <div className="main-page-video-heading2">{t("ph")}</div>
           {VideoGalery.length > 0 ? (
@@ -828,7 +841,10 @@ const MainPage = () => {
                     navigation(`/videogalery/`);
                   }}
                 >
-                  <div className="image-container" style={{paddingBottom: "10px"}}>
+                  <div
+                    className="image-container"
+                    style={{ paddingBottom: "10px" }}
+                  >
                     <video className="video-card-img" autoPlay={false}>
                       <source src={article.images[0]} />
                     </video>

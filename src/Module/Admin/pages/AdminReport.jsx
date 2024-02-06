@@ -1,5 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Col, DatePicker, Image, Modal, Row, Space, Table, Tag, message } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Image,
+  Modal,
+  Row,
+  Space,
+  Table,
+  Tag,
+  message,
+} from "antd";
 import axios from "axios";
 import { OnEdit as onEditContext } from "../../../Context";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +19,19 @@ import { API_URL } from "../../../../API";
 import moment from "moment/moment";
 import { AntDesignOutlined, FileImageOutlined } from "@ant-design/icons";
 import Input from "antd/es/input/Input";
+import { Bar, Line } from "react-chartjs-2";
+import {
+  Chart,
+  registerables,
+  LinearScale,
+  CategoryScale,
+  BarElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import "chartjs-adapter-date-fns";
+import "chart.js/auto";
+import "chartjs-adapter-date-fns";
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
@@ -18,7 +43,31 @@ const AdminReport = () => {
   const [visible, setVisible] = useState("");
   const [sortedArticleData, setSortedArticleData] = useState([]);
   const [category, setcategory] = useState([]);
+  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [articleDetails, setArticleDetails] = useState(null); // State to store detailed article information
   const navigation = useNavigate();
+  Chart.register(
+    ...registerables,
+    LinearScale,
+    CategoryScale,
+    BarElement,
+    Tooltip,
+    Legend
+  );
+
+  // useEffect(() => {
+  //   if (selectedArticle) {
+  //     axios
+  //       .get(`${API_URL}/article?id=${selectedArticle._id}`)
+  //       .then((response) => {
+  //         setArticleDetails(response.data);
+  //         console.log(response.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching article details:", error);
+  //       });
+  //   }
+  // }, [selectedArticle]);
 
   const OnDelete = () => {
     // Add your delete logic here
@@ -29,6 +78,23 @@ const AdminReport = () => {
     setIsModalDeleteOpen(false);
   };
 
+  const handleButtonClick = (articleId) => {
+    axios
+      .get(`${API_URL}/impressions/${articleId}`)
+      .then((response) => {
+        console.log(response?.data);
+        setSelectedArticle(response?.data?.impressions);
+        console.log(articleId);
+      })
+      .catch((error) => {
+        console.error("Error fetching impression data:", error);
+      });
+  };
+
+  const handleModalCancel = () => {
+    setSelectedArticle(null);
+  };
+
   useEffect(() => {
     axios.get(`${API_URL}/article`).then((article) => {
       setArticleData(article.data.reverse());
@@ -37,9 +103,12 @@ const AdminReport = () => {
   }, [axios]);
 
   useEffect(() => {
-    axios.get(`${API_URL}/content?type=category`).then((data) => {
-      setcategory(data?.data);
-    }).catch((err) => {});
+    axios
+      .get(`${API_URL}/content?type=category`)
+      .then((data) => {
+        setcategory(data?.data);
+      })
+      .catch((err) => {});
   }, []);
 
   useEffect(() => {
@@ -47,21 +116,27 @@ const AdminReport = () => {
     setSortedArticleData(initialSerialNumbers);
   }, [articleData]);
 
-  const handleSort = (column) => {
-    // Sorting logic here
-    // ...
-  };
+  const handleSort = (column) => {};
 
-  const handleArticleClick = () => {
+  const handleArticleClick = () => {};
 
-  }
-
-  console.log(handleArticleClick)
+  console.log(handleArticleClick);
   const columns = [
     {
       title: "News Id",
       dataIndex: "_id",
       key: "_id",
+    },
+
+    {
+      title: "Generate Report",
+      dataIndex: "actions",
+      key: "actions",
+      render: (_, record) => (
+        <Button onClick={() => handleButtonClick(record._id)}>
+          {console.log(record)}Report
+        </Button>
+      ),
     },
     {
       title: "Image",
@@ -97,7 +172,9 @@ const AdminReport = () => {
                   justifyContent: "center",
                 }}
               >
-                <FileImageOutlined style={{ fontSize: "24px", color: "#ccc" }} />
+                <FileImageOutlined
+                  style={{ fontSize: "24px", color: "#ccc" }}
+                />
               </div>
             )}
           </>
@@ -132,6 +209,49 @@ const AdminReport = () => {
     ...articleData[serialNumber - 1],
     serialNumber,
   }));
+
+  const chartData = {
+    labels: selectedArticle?.map((item) => item.date) || [], // Use an empty array if selectedArticle is null or undefined
+    datasets: [
+      {
+        label: "Number of Impressions",
+        data: selectedArticle?.map((item) => item.noOfImpressions) || [], // Use an empty array if selectedArticle is null or undefined
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  };
+
+  // const chartData = {
+  //   labels: ["2024-02-05", "2024-02-06"],
+  //   datasets: [
+  //     {
+  //       label: "Number of Impressions",
+  //       data: [19, 8],
+  //       backgroundColor: "rgba(75, 192, 192, 0.2)",
+  //       borderColor: "rgba(75, 192, 192, 1)",
+  //       borderWidth: 1,
+  //     },
+  //   ],
+  // };
+
+  const chartOptions = {
+    scales: {
+      x: {
+        type: "time",
+        time: {
+          unit: "day",
+          displayFormats: {
+            day: "yyyy-MM-dd",
+          },
+        },
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
   return (
     <>
@@ -175,6 +295,22 @@ const AdminReport = () => {
         >
           Are You Sure
         </div>
+      </Modal>
+      <Modal
+        title="Article Report"
+        visible={selectedArticle}
+        onCancel={handleModalCancel}
+        footer={null}
+      >
+        {selectedArticle && (
+          <>
+            {console.log("ChartData", chartData)}
+            {console.log("ChartOptions", chartOptions)}
+            <Bar key={Math.random()} data={chartData} options={chartOptions} />
+            <h2>{selectedArticle.title}</h2>
+            <p>{selectedArticle.content}</p>
+          </>
+        )}
       </Modal>
     </>
   );
